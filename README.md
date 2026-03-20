@@ -1,4 +1,4 @@
-# Selfie Coach
+# LooksMaxxing
 
 Selfie Coach is a lightweight browser app that gives feedback on selfie quality instead of judging appearance. It analyzes one face on-device and scores:
 
