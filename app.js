@@ -10,6 +10,7 @@ const imageInput = document.querySelector("#imageInput");
 const startCameraButton = document.querySelector("#startCameraButton");
 const captureButton = document.querySelector("#captureButton");
 const stopCameraButton = document.querySelector("#stopCameraButton");
+const mirrorToggle = document.querySelector("#mirrorToggle");
 const cameraFeed = document.querySelector("#cameraFeed");
 const previewCanvas = document.querySelector("#previewCanvas");
 const statusPanel = document.querySelector("#statusPanel");
@@ -22,6 +23,7 @@ const ctx = previewCanvas.getContext("2d");
 
 let faceLandmarker;
 let cameraStream;
+let isMirrorEnabled = mirrorToggle?.checked ?? true;
 
 const metricLabels = ["Lighting", "Sharpness", "Framing", "Pose", "Expression"];
 
@@ -68,6 +70,9 @@ imageInput.addEventListener("change", async (event) => {
 startCameraButton.addEventListener("click", startCamera);
 captureButton.addEventListener("click", captureFrame);
 stopCameraButton.addEventListener("click", stopCamera);
+mirrorToggle?.addEventListener("change", handleMirrorToggle);
+
+applyMirrorState();
 
 async function startCamera() {
   try {
@@ -82,6 +87,7 @@ async function startCamera() {
 
     cameraFeed.srcObject = cameraStream;
     cameraFeed.hidden = false;
+    applyMirrorState();
     captureButton.disabled = false;
     stopCameraButton.disabled = false;
     setStatus("Camera ready. Capture a frame when you like the shot.");
@@ -101,6 +107,7 @@ function stopCamera() {
 
   cameraFeed.srcObject = null;
   cameraFeed.hidden = true;
+  applyMirrorState();
   captureButton.disabled = true;
   stopCameraButton.disabled = true;
 }
@@ -122,7 +129,7 @@ async function analyzeSource(source, label) {
   const width = source.videoWidth || source.naturalWidth || source.width;
   const height = source.videoHeight || source.naturalHeight || source.height;
   resizeCanvas(width, height);
-  ctx.drawImage(source, 0, 0, width, height);
+  drawSourceToCanvas(source, width, height);
 
   setStatus(`Analyzing ${label}…`);
 
@@ -144,6 +151,32 @@ async function analyzeSource(source, label) {
 function resizeCanvas(width, height) {
   previewCanvas.width = width;
   previewCanvas.height = height;
+}
+
+function handleMirrorToggle(event) {
+  isMirrorEnabled = event.target.checked;
+  applyMirrorState();
+}
+
+function applyMirrorState() {
+  cameraFeed.classList.toggle("mirrored", isMirrorEnabled);
+  previewCanvas.classList.toggle("mirrored", isMirrorEnabled && !cameraFeed.hidden);
+}
+
+function drawSourceToCanvas(source, width, height) {
+  const shouldMirror = source === cameraFeed && isMirrorEnabled;
+
+  ctx.save();
+  ctx.clearRect(0, 0, width, height);
+
+  if (shouldMirror) {
+    ctx.translate(width, 0);
+    ctx.scale(-1, 1);
+  }
+
+  ctx.drawImage(source, 0, 0, width, height);
+  ctx.restore();
+  previewCanvas.classList.toggle("mirrored", shouldMirror);
 }
 
 function scoreSelfie(landmarks, canvas) {

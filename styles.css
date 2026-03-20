@@ -129,6 +129,21 @@ button {
   margin-top: 14px;
 }
 
+.mirror-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.mirror-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
 button {
   background: var(--panel-strong);
   color: var(--ink);
@@ -249,4 +264,8 @@ button:disabled {
   .stage {
     min-height: 380px;
   }
+}
+
+.mirrored {
+  transform: scaleX(-1);
 }
