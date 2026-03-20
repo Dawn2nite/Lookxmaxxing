@@ -73,6 +73,7 @@ stopCameraButton.addEventListener("click", stopCamera);
 mirrorToggle?.addEventListener("change", handleMirrorToggle);
 
 applyMirrorState();
+showCanvasPreview();
 
 async function startCamera() {
   try {
@@ -86,7 +87,7 @@ async function startCamera() {
     });
 
     cameraFeed.srcObject = cameraStream;
-    cameraFeed.hidden = false;
+    showLivePreview();
     applyMirrorState();
     captureButton.disabled = false;
     stopCameraButton.disabled = false;
@@ -107,6 +108,7 @@ function stopCamera() {
 
   cameraFeed.srcObject = null;
   cameraFeed.hidden = true;
+  showCanvasPreview();
   applyMirrorState();
   captureButton.disabled = true;
   stopCameraButton.disabled = true;
@@ -129,6 +131,7 @@ async function analyzeSource(source, label) {
   const width = source.videoWidth || source.naturalWidth || source.width;
   const height = source.videoHeight || source.naturalHeight || source.height;
   resizeCanvas(width, height);
+  showCanvasPreview();
   drawSourceToCanvas(source, width, height);
 
   setStatus(`Analyzing ${label}…`);
@@ -151,6 +154,18 @@ async function analyzeSource(source, label) {
 function resizeCanvas(width, height) {
   previewCanvas.width = width;
   previewCanvas.height = height;
+}
+
+function showLivePreview() {
+  cameraFeed.hidden = false;
+  previewCanvas.hidden = true;
+}
+
+function showCanvasPreview() {
+  previewCanvas.hidden = false;
+  if (!cameraStream) {
+    cameraFeed.hidden = true;
+  }
 }
 
 function handleMirrorToggle(event) {
