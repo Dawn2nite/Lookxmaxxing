@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selfie Coach</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace">
+        <div class="controls card">
+          <h2>Choose a photo</h2>
+          <label class="upload-button">
+            <input id="imageInput" type="file" accept="image/*" />
+            Upload selfie
+          </label>
+
+          <div class="camera-actions">
+            <button id="startCameraButton" type="button">Start camera</button>
+            <button id="captureButton" type="button" disabled>Capture frame</button>
+            <button id="stopCameraButton" type="button" disabled>Stop camera</button>
+          </div>
+
+          <p class="hint">
+            Best results come from a clear front-facing photo with one visible face.
+          </p>
+
+          <div class="status-panel" id="statusPanel">Loading face analysis model…</div>
+        </div>
+
+        <div class="preview card">
+          <div class="stage">
+            <video id="cameraFeed" autoplay playsinline muted hidden></video>
+            <canvas id="previewCanvas" width="960" height="720"></canvas>
+          </div>
+        </div>
+
+        <aside class="results card">
+          <div class="score-header">
+            <p class="score-label">Selfie Score</p>
+            <p class="score-value" id="overallScore">--</p>
+          </div>
+
+          <div class="metric-grid" id="metricGrid">
+            <article class="metric">
+              <span>Lighting</span>
+              <strong>--</strong>
+            </article>
+            <article class="metric">
+              <span>Sharpness</span>
+              <strong>--</strong>
+            </article>
+            <article class="metric">
+              <span>Framing</span>
+              <strong>--</strong>
+            </article>
+            <article class="metric">
+              <span>Pose</span>
+              <strong>--</strong>
+            </article>
+            <article class="metric">
+              <span>Expression</span>
+              <strong>--</strong>
+            </article>
+          </div>
+
+          <div class="feedback-block">
+            <h2>What to improve</h2>
+            <ul id="feedbackList">
+              <li>Waiting for a selfie.</li>
+            </ul>
+          </div>
+
+          <div class="feedback-block">
+            <h2>What looks strong</h2>
+            <ul id="strengthList">
+              <li>The app will highlight positives too.</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
