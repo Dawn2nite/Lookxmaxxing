@@ -160,7 +160,7 @@ function handleMirrorToggle(event) {
 
 function applyMirrorState() {
   cameraFeed.classList.toggle("mirrored", isMirrorEnabled);
-  previewCanvas.classList.toggle("mirrored", isMirrorEnabled && !cameraFeed.hidden);
+  previewCanvas.classList.remove("mirrored");
 }
 
 function drawSourceToCanvas(source, width, height) {
@@ -176,7 +176,6 @@ function drawSourceToCanvas(source, width, height) {
 
   ctx.drawImage(source, 0, 0, width, height);
   ctx.restore();
-  previewCanvas.classList.toggle("mirrored", shouldMirror);
 }
 
 function scoreSelfie(landmarks, canvas) {
